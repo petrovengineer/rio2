@@ -1,31 +1,17 @@
 const express = require('express');
+require('dotenv').config();
+require('./mongo');
 const { buildSchema } = require('graphql');
 const {graphqlHTTP} = require('express-graphql');
+const schema = require('./schema');
 
 const app = express();
 let port = 3100;
-
-let schema = buildSchema(`
-  type Query {
-    postTitle: String,
-    blogTitle: String
-  }
-`);
-
-let root = {
-    postTitle: () => {
-      return 'Build a Simple GraphQL Server With Express and NodeJS';
-    },
-    blogTitle: () => {
-      return 'scotch.io';
-    }
-  };  
 
 app.use(
     '/graphql',
     graphqlHTTP({
       schema: schema,
-      rootValue: root,
       graphiql: true,
     }),
   );
