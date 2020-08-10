@@ -4,12 +4,15 @@ require('./mongo');
 const { buildSchema } = require('graphql');
 const {graphqlHTTP} = require('express-graphql');
 const schema = require('./schema');
+var bodyParser = require('body-parser')
 
 const app = express();
 let port = 3100;
 
+app.use(bodyParser.json());
+
 app.use(
-    '/graphql',
+    '/graphql', (req,res,next)=>{console.log(req.body); next();},
     graphqlHTTP({
       schema: schema,
       graphiql: true,
