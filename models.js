@@ -45,13 +45,6 @@ module.exports.Order = mongoose.model('Order',
     }
 )
 
-module.exports.Change = mongoose.model('Change',
-    {
-        food:{type: Schema.Types.ObjectId, ref:'Food'},
-        ingredients: [{type: Schema.Types.ObjectId, ref: 'Ingredient'}],
-    }
-)
-
 module.exports.Food = mongoose.model('Food',
     {
         name: String,
