@@ -110,6 +110,7 @@ const IngredientTypeType = new GraphQLObjectType({
 const FoodTypeGQ = new GraphQLObjectType({
     name: 'FoodTypeGQ',
     fields:()=>({
+        _id: {type: GraphQLString},
         name: {type: GraphQLString},
         ingredients: {type: new GraphQLList(IngredientType),
             resolve:(food)=>{
@@ -171,7 +172,8 @@ const QueryRootType = new GraphQLObjectType({
         },
         food:{
             type: new GraphQLList(FoodTypeGQ),
-            resolve: async ()=>{
+            resolve: async (args)=>{
+                console.log("PROPS", args);
                 return await Food.find({})
             }
         },
