@@ -5,7 +5,8 @@ const {
     GraphQLObjectType,
     GraphQLNonNull,
     GraphQLSchema,
-    GraphQLBoolean
+    GraphQLBoolean,
+    GraphQLInputObjectType
 } = require('graphql');
 const {User, Customer, FoodType, Order, Food, Ingredient, IngType} = require('./models');
 
@@ -109,7 +110,7 @@ const IngredientTypeType = new GraphQLObjectType({
 
 const FoodTypeGQ = new GraphQLObjectType({
     name: 'FoodTypeGQ',
-    fields:()=>({
+    fields:(args)=>({
         _id: {type: GraphQLString},
         name: {type: GraphQLString},
         ingredients: {type: new GraphQLList(IngredientType),
@@ -137,9 +138,16 @@ const ImgType = new GraphQLObjectType({
     fields:()=>({
         data: {type: GraphQLString,
         resolve:(img)=>{
-            return img.data.toString()
+            return Buffer(img.data, 'binary').toString('base64')
         }},
         contentType: {type: GraphQLString}
+    })
+})
+
+const FoodInputType = new GraphQLInputObjectType({
+    name: 'FoodInputType',
+    fields:()=>({
+        foodtype: {type: GraphQLString}
     })
 })
 
@@ -172,9 +180,11 @@ const QueryRootType = new GraphQLObjectType({
         },
         food:{
             type: new GraphQLList(FoodTypeGQ),
-            resolve: async (args)=>{
-                console.log("PROPS", args);
-                return await Food.find({})
+            args:{
+                _id: {type: GraphQLString}
+            },
+            resolve: async (parent, args)=>{
+                return await Food.find({foodTypes:args._id})
             }
         },
         ingredients:{

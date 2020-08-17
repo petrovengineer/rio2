@@ -15,7 +15,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use(
-    '/graphql',
+    '/graphql', (req,res, next)=>{console.log(req.body); next();},
     graphqlHTTP({
       schema: schema,
       graphiql: true,
