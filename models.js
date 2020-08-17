@@ -17,7 +17,7 @@ module.exports.Customer = mongoose.model('Customer',
     {
         name: String,
         cart:[{type: Schema.Types.ObjectId, ref:'Food'}],
-        phone: String,
+        phone: {type: String, required: true},
         email: String,
         address: String,
         apnumber: String,
