@@ -15,7 +15,7 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
-app.use('/graphql', authenticateToken, 
+app.use('/rio2api/graphql', authenticateToken, 
     (req,res, next)=>{console.log("PHONE ",req.phone); next();},
     graphqlHTTP({
       schema: schema,
@@ -23,7 +23,7 @@ app.use('/graphql', authenticateToken,
     }),
   );
 
-app.use('/auth',require('./auth').router);
+app.use('/rio2api/auth',require('./auth').router);
           
 
 app.listen(port);
