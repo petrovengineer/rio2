@@ -1,3 +1,4 @@
+const {authenticateToken} = require('./auth');
 const express = require('express');
 require('dotenv').config();
 require('./mongo');
@@ -14,8 +15,8 @@ app.use(cors());
 
 app.use(bodyParser.json());
 
-app.use(
-    '/graphql', (req,res, next)=>{console.log(req.body); next();},
+app.use('/graphql', authenticateToken, 
+    (req,res, next)=>{console.log("PHONE ",req.phone); next();},
     graphqlHTTP({
       schema: schema,
       graphiql: true,

@@ -193,6 +193,7 @@ router.get('/makeadmin', authenticateToken, async (req, res)=>{
 function authenticateToken(req, res, next){
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
+    console.log("TOKEN ", authHeader);
     if (token == null){
         next();
         // res.sendStatus(401)

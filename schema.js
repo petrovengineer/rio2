@@ -144,13 +144,6 @@ const ImgType = new GraphQLObjectType({
     })
 })
 
-const FoodInputType = new GraphQLInputObjectType({
-    name: 'FoodInputType',
-    fields:()=>({
-        foodtype: {type: GraphQLString}
-    })
-})
-
 const QueryRootType = new GraphQLObjectType({
     name:'QueryRootType',
     fields: ()=>({
@@ -174,8 +167,9 @@ const QueryRootType = new GraphQLObjectType({
         },
         orders:{
             type: new GraphQLList(OrderType),
-            resolve: async ()=>{
-                return await Order.find({})
+            resolve: async (root, args, req )=>{
+                const customer = await Customer.findOne({phone:req.phone})
+                return await Order.find({customer:customer._id})
             }
         },
         food:{
@@ -202,8 +196,76 @@ const QueryRootType = new GraphQLObjectType({
     })
 })
 
+const OrderInputType = new GraphQLInputObjectType({
+    name:'OrderInputType',
+    fields: ()=>({
+        number:{type: GraphQLString},
+        name: {type: GraphQLString},
+        phone: {type: GraphQLString},
+        cart: {type: new GraphQLList(CartInputType)},
+        address:{type: GraphQLString},
+        apnumber:{type: GraphQLString},
+        floor:{type: GraphQLString},
+        pay:{type: GraphQLString},
+        comment:{type: GraphQLString}
+    })
+})
+
+const CartInputType = new GraphQLInputObjectType({
+    name:'CartInputType',
+    fields: ()=>({
+        food: {type: GraphQLString},
+        count: {type: GraphQLInt},
+        ingredients: {type: new GraphQLList(IngredientInputType)}
+    })
+})
+
+const IngredientInputType = new GraphQLInputObjectType({
+    name: 'IngredientInputType',
+    fields: ()=>({
+        name: {type: GraphQLString}
+    })
+})
+
+const MutationRootType = new GraphQLObjectType({
+    name: 'MutationRootType',
+    fields:()=>({
+        makeOrder:{
+            type: OrderType,
+            args:{
+                input:{type: OrderInputType}
+            },
+            resolve: async (root, {input}, req)=>{
+                try{
+                    const last = await Order.findOne({},{}, { sort: { 'created' : -1 }});
+                    console.log("LAST", last)
+                    const customer = await Customer.findOne({phone:req.phone});
+                    let cId = null;
+                    if(customer!=null){cId = customer._id;}
+                    const order = new Order({
+                        customer: cId,
+                        number: last==null?1:last.number+1,
+                        cart: input.cart,
+                        address:input.address,
+                        apnumber:input.apnumber,
+                        floor:input.floor,
+                        pay:input.pay,
+                        comment:input.comment
+                    });
+                    const newOrder = await order.save();
+                    return newOrder;
+                }
+                catch(err){
+                    console.log(err);
+                }
+            }
+        }
+    })
+})
+
 const MainSchema = new GraphQLSchema({
-    query: QueryRootType
+    query: QueryRootType,
+    mutation: MutationRootType
 })
 
 module.exports = MainSchema;
