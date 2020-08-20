@@ -169,7 +169,7 @@ const QueryRootType = new GraphQLObjectType({
             type: new GraphQLList(OrderType),
             resolve: async (root, args, req )=>{
                 const customer = await Customer.findOne({phone:req.phone})
-                return await Order.find({customer:customer._id})
+                return await Order.find({customer:customer._id}, {}, { sort: { 'created' : -1 }})
             }
         },
         food:{
