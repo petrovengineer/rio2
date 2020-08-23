@@ -8,7 +8,7 @@ const {
     GraphQLBoolean,
     GraphQLInputObjectType
 } = require('graphql');
-const {User, Customer, FoodType, Order, Food, Ingredient, IngType} = require('./models');
+const {User, Customer, FoodType, Order, Food, Ingredient, IngType, Param, ParamListItem} = require('./models');
 
 const UserType = new GraphQLObjectType({
     name:'UserType',
@@ -91,9 +91,11 @@ const CartType = new GraphQLObjectType({
 const IngredientType = new GraphQLObjectType({
     name: 'IngredientType',
     fields: ()=>({
+        _id: {type: GraphQLString},
         name: {type: GraphQLString},
         exist: {type: GraphQLBoolean},
         visible: {type: GraphQLBoolean},
+        coast: {type: GraphQLInt},
         type: {type: IngredientTypeType,
         resolve:(ingredient)=>{
             return IngType.findOne({_id: ingredient.type})
@@ -104,6 +106,7 @@ const IngredientType = new GraphQLObjectType({
 const IngredientTypeType = new GraphQLObjectType({
     name: 'IngredientTypeType',
     fields:()=>({
+        _id: {type: GraphQLString},
         name: {type: GraphQLString},
     })
 })
@@ -129,7 +132,28 @@ const FoodTypeGQ = new GraphQLObjectType({
             }    
         },
         img: {type: ImgType},
-        coast: {type: GraphQLInt}
+        coast: {type: GraphQLInt},
+        params:{type: GraphQLList(ParamType),
+            resolve:(food)=>{
+                return Param.find({_id: food.params});
+            }
+        }
+    })
+})
+const ParamType = new GraphQLObjectType({
+    name: 'ParamType',
+    fields:()=>({
+        _id: {type: GraphQLString},
+        name: {type: GraphQLString},
+        list: {type: new GraphQLList(ParamListType)}
+    })
+})
+
+const ParamListType = new GraphQLObjectType({
+    name: 'ParamListType',
+    fields:()=>({
+        name: {type: GraphQLString},
+        coast: {type: GraphQLInt},
     })
 })
 

@@ -52,7 +52,8 @@ module.exports.Food = mongoose.model('Food',
         avIngTypes: [{type: Schema.Types.ObjectId, ref: 'IngType'}],
         foodTypes: [{type: Schema.Types.ObjectId, ref: 'FoodType'}],
         img: {data: Buffer, contentType: String},
-        coast: {type: Number, default: null}
+        coast: {type: Number, default: null},
+        params: [{type: Schema.Types.ObjectId, ref: 'Param'}]
     }
 )
 module.exports.Ingredient = mongoose.model('Ingredient',
@@ -60,7 +61,8 @@ module.exports.Ingredient = mongoose.model('Ingredient',
         name: String,
         exist: {type: Boolean, default: false},
         visible: {type: Boolean, default: false},
-        type: {type: Schema.Types.ObjectId, ref: 'IngType'}
+        type: {type: Schema.Types.ObjectId, ref: 'IngType'},
+        coast: {type: Number, default: null},
     }
 )
 module.exports.IngType = mongoose.model('IngType',
@@ -71,5 +73,11 @@ module.exports.IngType = mongoose.model('IngType',
 module.exports.FoodType = mongoose.model('FoodType',
     {
         name: String,
+    }
+)
+module.exports.Param = mongoose.model('Param',
+    {
+        name: String,
+        list: [{name: String, coast: {type: Number, default: 0}}],
     }
 )
