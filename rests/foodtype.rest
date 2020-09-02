@@ -1,0 +1,38 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluIiwiaWF0IjoxNTk1NDE0NjI5LCJleHAiOjE2MjY5NTA2Mjl9.X9-LqVWrNlgUISyCg4De3f0Bpm9o-AVQ6qLE0vu-yUM
+@host = http://localhost:3000
+
+###
+GET {{host}}/foodtype/
+# Authorization: Bearer {{token}}
+
+###
+GET {{host}}/foodtype?_id=5f1834200ce15ea7d6b76021
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/foodtype/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name":"test1"
+}
+
+###
+PUT {{host}}/foodtype
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "_id":"5f1834200ce15ea7d6b76021",
+    "name":"Pizza"
+}
+
+###
+DELETE {{host}}/foodtype/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "id":"5f197797ecf6e415ed141f2e"
+}

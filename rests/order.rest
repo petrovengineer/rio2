@@ -1,0 +1,42 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBldHJvdmVuZ2luZWVyQGdtYWlsLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1OTU1ODg1OTYsImV4cCI6MTYyNzEyNDU5Nn0.ASzbG1cN3sfKeRWzzraluWNsRFm8Cwv8XhBMIN6Lyb8
+@host = http://localhost:3000
+
+###
+GET {{host}}/order/
+Authorization: Bearer {{token}}
+
+###
+GET {{host}}/order?_id=5f1aa2bc18b08a42d3df8cba
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/order/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "changes":[{"food": "5f184267376a16b2e5aa74a7", "ingredients":["5f1ad1b6983ce15b02e87a9d"]}],
+    "food":["5f1844d5242e8db569f70c98"],
+    "info":"Pavel +79500424342 SPb, Moskovsoe sh 52",
+    "comment": "Test comment."
+}
+
+###
+# PUT {{host}}/food
+# Authorization: Bearer {{token}}
+# Content-Type: application/json
+
+# {
+#     "_id":"5f1844d5242e8db569f70c98",
+#     "name":"Beer",
+#     "foodTypes":["5f183e4894c472ae585e91fc"]
+# }
+
+###
+DELETE {{host}}/order/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "_id":"5f1ae35209e5ca6435aaf8c7"
+}

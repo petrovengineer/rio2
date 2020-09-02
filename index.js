@@ -23,7 +23,9 @@ app.use('/rio2api/graphql', authenticateToken,
     }),
   );
 
-app.use('/rio2api/auth',require('./auth').router);
+// app.use('/rio2api/auth',require('./auth').router);
+
+app.use('/rio2api',require("./routes"));
           
 
 app.listen(port);

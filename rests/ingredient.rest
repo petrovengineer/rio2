@@ -1,0 +1,38 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBldHJvdmVuZ2luZWVyQGdtYWlsLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1OTU1OTE5MzgsImV4cCI6MTYyNzEyNzkzOH0.ZbpF5ZNn8AL8HcFIYyqOjg_Zn6_zqvUoYEEweYzzHEM
+@host = http://localhost:3000
+
+###
+GET {{host}}/ingredient
+Authorization: Bearer {{token}}
+
+###
+GET {{host}}/ingredient?_id=5f1834200ce15ea7d6b76021
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/ingredient
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name":"Test"
+}
+
+###
+PUT {{host}}/ingredient
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "_id":"5f1ad1fb983ce15b02e87a9e",
+    "type":"5f1ad6f26eaa6e5e045bc1cb"
+}
+
+###
+DELETE {{host}}/ingredient
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "id":"5f1ad2c062fa4f5b6afe8111"
+}

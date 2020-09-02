@@ -1,0 +1,39 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBldHJvdmVuZ2luZWVyQGdtYWlsLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1OTU1OTE5MzgsImV4cCI6MTYyNzEyNzkzOH0.ZbpF5ZNn8AL8HcFIYyqOjg_Zn6_zqvUoYEEweYzzHEM
+@host = http://localhost:3100/rio2api
+
+###
+GET {{host}}/food/
+Authorization: Bearer {{token}}
+
+###
+GET {{host}}/food?_id=5f184267376a16b2e5aa74a7
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/food/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name":"UnoMomento",
+    "foodTypes":["5f1834200ce15ea7d6b76021"]
+}
+
+###
+PUT {{host}}/food
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "_id":"5f184267376a16b2e5aa74a7",
+    "ingredients":["5f1ad1b6983ce15b02e87a9d", "5f1ad1fb983ce15b02e87a9e"]
+}
+
+###
+DELETE {{host}}/food/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "_id":"5f184073898766afc5968e68"
+}

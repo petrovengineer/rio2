@@ -1,0 +1,23 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBldHJvdmVuZ2luZWVyQGdtYWlsLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1OTU1OTE5MzgsImV4cCI6MTYyNzEyNzkzOH0.ZbpF5ZNn8AL8HcFIYyqOjg_Zn6_zqvUoYEEweYzzHEM
+@host = http://localhost:3000
+
+###
+GET {{host}}/user/
+authorization: Bearer {{token}}
+
+###
+GET {{host}}/user?_id=5f1ab61519e0264baf21a7a2
+authorization: Bearer {{token}}
+
+###
+DELETE {{host}}/user/
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "id":"5f1acae31c406a572e5a7a08"
+}
+
+###
+GET {{host}}/auth/makeadmin?id=5f1acbb27051e557a98faadf
+Authorization: Bearer {{token}}

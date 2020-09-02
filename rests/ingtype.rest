@@ -1,0 +1,33 @@
+@token = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBldHJvdmVuZ2luZWVyQGdtYWlsLmNvbSIsImFkbWluIjp0cnVlLCJpYXQiOjE1OTU1OTE5MzgsImV4cCI6MTYyNzEyNzkzOH0.ZbpF5ZNn8AL8HcFIYyqOjg_Zn6_zqvUoYEEweYzzHEM
+@host = http://localhost:3000
+
+###
+GET {{host}}/ingtype
+Authorization: Bearer {{token}}
+
+###
+GET {{host}}/ingtype?_id=5f1ad5e99623e85ce48e897d
+Authorization: Bearer {{token}}
+
+###
+POST {{host}}/ingtype
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "name":"Мясо"
+}
+
+###
+PUT {{host}}/ingtype
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "_id":"5f1ad5e99623e85ce48e897d",
+    "name":"Test2"
+}
+
+###
+DELETE {{host}}/ingtype?_id=5f1ad5e99623e85ce48e897d
+Authorization: Bearer {{token}}

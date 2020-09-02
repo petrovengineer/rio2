@@ -1,0 +1,20 @@
+###
+POST http://localhost:3000/auth/reg
+content-type: application/json
+
+{
+    "password":"1212",
+    "email":"petrovengineer@gmail.com",
+    "phone":"+79111231212",
+    "address":"Spb",
+    "name":"Pavel"
+}
+
+###
+POST http://localhost:3000/auth/login
+content-type: application/json
+
+{
+    "email":"petrovengineer@gmail.com",
+    "password":"1212"
+}
