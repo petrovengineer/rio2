@@ -16,7 +16,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/rio2api/graphql', authenticateToken, 
-    (req,res, next)=>{console.log("PHONE ",req.phone); next();},
+    (req,res, next)=>{console.log("REQ ",req.body); next();},
     graphqlHTTP({
       schema: schema,
       graphiql: true,

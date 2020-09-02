@@ -34,8 +34,15 @@ module.exports.Order = mongoose.model('Order',
         created: {type: Date, default: Date.now},
         done: {type: Date, default: null},
         status: {type: Number, min: 0, max:3, default: 0},
-        cart:[{food: {type: Schema.Types.ObjectId, ref:'Food'}, 
-            count: Number, ingredients:  [{type: Schema.Types.ObjectId, ref:'Ingredients'}]}],
+        cart:[
+            {
+                food: {name: String, composition: String, coast: Number}, 
+                count: Number,
+                coast: Number,
+                ingredients:  [{name: String, coast: Number, weight: Number}],
+                selected:  [{name: String, pname: String, coast: Number}],
+            }
+        ],
         customer:{type: Schema.Types.ObjectId, ref:'Customer'},
         address:{type: String},
         apnumber:{type: String},

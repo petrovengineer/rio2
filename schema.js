@@ -74,17 +74,37 @@ const OrderType = new GraphQLObjectType({
 const CartType = new GraphQLObjectType({
     name:'CartType',
     fields: ()=>({
-        food: {type: FoodTypeGQ,
-            resolve:(cart)=>{
-                return Food.findOne({_id: cart.food})
-            }
-        },
+        food: {type: CartFoodType},
         count: {type: GraphQLInt},
-        ingredients: {type: new GraphQLList(IngredientType),
-            resolve:(cart)=>{
-                return Ingredient.find({_id: cart.ingredients})
-            }
-        }
+        coast: {type: GraphQLInt},
+        ingredients: {type: new GraphQLList(CartIngType)},
+        selected: {type: new GraphQLList(CartSelType)}
+    })
+})
+
+const CartFoodType = new GraphQLObjectType({
+    name:'CartFoodType',
+    fields: ()=>({
+        name: {type: GraphQLString}, 
+        composition: {type: GraphQLString}, 
+        coast: {type: GraphQLInt}
+    })
+})
+
+const CartIngType = new GraphQLObjectType({
+    name:'CartIngType',
+    fields: ()=>({
+        name: {type: GraphQLString}, 
+        coast: {type: GraphQLInt}
+    })
+})
+
+const CartSelType = new GraphQLObjectType({
+    name:'CartSelType',
+    fields: ()=>({
+        name: {type: GraphQLString}, 
+        pname: {type: GraphQLString}, 
+        coast: {type: GraphQLInt}
     })
 })
 
@@ -131,6 +151,8 @@ const FoodTypeGQ = new GraphQLObjectType({
                 return FoodType.find({_id: food.foodTypes})
             }    
         },
+        composition:{type: GraphQLString},
+        weight: {type: GraphQLString},
         img: {type: ImgType},
         coast: {type: GraphQLInt},
         params:{type: GraphQLList(ParamType),
@@ -240,16 +262,41 @@ const CartInputType = new GraphQLInputObjectType({
     fields: ()=>({
         food: {type: GraphQLString},
         count: {type: GraphQLInt},
-        ingredients: {type: new GraphQLList(IngredientInputType)}
+        coast: {type: GraphQLInt},
+        ingredients: {type: new GraphQLList(GraphQLString)},
+        selected: {type: new GraphQLList(SelectedInputType)}
+    })
+})
+
+const SelectedInputType = new GraphQLInputObjectType({
+    name: 'SelectedInputType',
+    fields: ()=>({
+        _id: {type: GraphQLString},
+        name: {type: GraphQLString},
+        pname: {type: GraphQLString}
     })
 })
 
 const IngredientInputType = new GraphQLInputObjectType({
     name: 'IngredientInputType',
     fields: ()=>({
-        name: {type: GraphQLString}
+        _id: {type: GraphQLString}
     })
 })
+// const SelectedInputType = new GraphQLInputObjectType({
+//     name: 'SelectedInputType',
+//     fields: ()=>({
+//         name: {type: GraphQLString},
+//         pname: {type: GraphQLString}
+//     })
+// })
+
+// const IngredientInputType = new GraphQLInputObjectType({
+//     name: 'IngredientInputType',
+//     fields: ()=>({
+//         name: {type: GraphQLString}
+//     })
+// })
 
 const MutationRootType = new GraphQLObjectType({
     name: 'MutationRootType',
@@ -261,15 +308,41 @@ const MutationRootType = new GraphQLObjectType({
             },
             resolve: async (root, {input}, req)=>{
                 try{
+                    console.log("MUTATION");
                     const last = await Order.findOne({},{}, { sort: { 'created' : -1 }});
-                    console.log("LAST", last)
                     const customer = await Customer.findOne({phone:req.phone});
                     let cId = null;
                     if(customer!=null){cId = customer._id;}
+                    const newCart = [];
+                    console.log("INPUT CART", input.cart);
+                    for(let i=0; i<input.cart.length; i++){
+                        let good = input.cart[i];
+                        const food = await Food.findOne({_id: good.food});
+                        const ings = await Ingredient.find({_id:good.ingredients});
+                        const params = await Param.find({_id:good.selected.map(p=>p._id)});
+                        const prms = good.selected.map(
+                            p=>{
+                                const param = params.find(param=>param.name===p.pname);
+                                const coast = param.list.find(pl=>pl.name===p.name).coast;
+                                return {name:p.name, pname: p.pname, coast: coast}
+                            }
+                        )
+                        const ingsCoast = ings.map(i=>i.coast).reduce((akk, cur)=>(akk+cur),0);
+                        const selCoast = prms.map(p=>p.coast).reduce((akk, cur)=>(akk+cur),0);
+                        const coast = (food.coast+ingsCoast+selCoast)*good.count;
+                        newCart.push({
+                            food:{name:food.name, composition: food.composition, coast: food.coast},
+                            count: good.count,
+                            coast: coast,
+                            ingredients: ings.map(i=>({name: i.name, coast:i.coast, weight: i.weight})),
+                            selected: prms
+                        });
+                    }
+                    console.log("NEWCART", newCart);
                     const order = new Order({
                         customer: cId,
                         number: last==null?1:last.number+1,
-                        cart: input.cart,
+                        cart: newCart,
                         address:input.address,
                         apnumber:input.apnumber,
                         floor:input.floor,
