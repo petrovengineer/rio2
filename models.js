@@ -48,12 +48,14 @@ module.exports.Order = mongoose.model('Order',
 module.exports.Food = mongoose.model('Food',
     {
         name: String,
+        composition: String,
         ingredients: [{type: Schema.Types.ObjectId, ref: 'Ingredient'}],
         avIngTypes: [{type: Schema.Types.ObjectId, ref: 'IngType'}],
         foodTypes: [{type: Schema.Types.ObjectId, ref: 'FoodType'}],
         img: {data: Buffer, contentType: String},
         coast: {type: Number, default: null},
-        params: [{type: Schema.Types.ObjectId, ref: 'Param'}]
+        params: [{type: Schema.Types.ObjectId, ref: 'Param'}],
+        weight: {type: Number, default: 0}
     }
 )
 module.exports.Ingredient = mongoose.model('Ingredient',
@@ -63,6 +65,7 @@ module.exports.Ingredient = mongoose.model('Ingredient',
         visible: {type: Boolean, default: false},
         type: {type: Schema.Types.ObjectId, ref: 'IngType'},
         coast: {type: Number, default: null},
+        weight: {type: Number, default: 0}
     }
 )
 module.exports.IngType = mongoose.model('IngType',

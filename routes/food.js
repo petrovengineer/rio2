@@ -27,7 +27,9 @@ router.get('/', authenticateToken, async (req, res)=>{
                     foodTypes: f.foodTypes,
                     img: f.img.data!=null?{data: Buffer(f.img.data, 'binary').toString('base64'), contentType: String}:null,
                     coast: f.coast,
-                    params: f.params
+                    params: f.params,
+                    composition: f.composition,
+                    weight: f.weight
                 };
             })
         );
@@ -75,7 +77,7 @@ router.post('/upload', upload.single('file'), async (req, res)=>{
 
 router.put('/', authenticateToken, isAdmin, async (req, res)=>{
     const {_id} = req.body;
-    console.log(req.body);
+    console.log("CHANGE",req.body);
     const update = Object.assign({}, req.body);
     delete update._id;
     try{
