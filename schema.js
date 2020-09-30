@@ -152,7 +152,7 @@ const FoodTypeGQ = new GraphQLObjectType({
             }    
         },
         composition:{type: GraphQLString},
-        weight: {type: GraphQLString},
+        weight: {type: GraphQLInt},
         img: {type: ImgType},
         coast: {type: GraphQLInt},
         params:{type: GraphQLList(ParamType),
@@ -176,6 +176,7 @@ const ParamListType = new GraphQLObjectType({
     fields:()=>({
         name: {type: GraphQLString},
         coast: {type: GraphQLInt},
+        weight: {type: GraphQLInt}
     })
 })
 

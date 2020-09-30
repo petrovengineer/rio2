@@ -88,6 +88,6 @@ module.exports.FoodType = mongoose.model('FoodType',
 module.exports.Param = mongoose.model('Param',
     {
         name: String,
-        list: [{name: String, coast: {type: Number, default: 0}}],
+        list: [{name: String, coast: {type: Number, default: 0}, weight: {type: Number, default:0}}],
     }
 )
